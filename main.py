@@ -5,29 +5,35 @@ from PIL import Image
 import watermark
 import util
 
-sample_image = "sample/lenna.png"
-watermark_image = "sample/watermark.bmp"
-watermark_insert = "out/watermark_insert.png"
-watermark_extract = "out/watermark_extract.bmp"
-
-def test_watermark():
-    len_key = 10
-    key = "".join([random.choice(string.ascii_letters) for _ in range(len_key)])
-    watermark.insert(sample_image, watermark_image, key, watermark_insert)
-    watermark.extract(watermark_insert, key, watermark_extract)
-    print("Original:", sample_image)
-    print("Watermark:", watermark_image)
-    print("Saved as:", watermark_insert)
-    print("Extracted:", watermark_extract)
-
-def test_psnr():
-    img_b = Image.open(sample_image)
-    img_a = Image.open(watermark_insert)
-    print("PSNR:", util.psnr(img_a, img_b), "dB")
-
 def main():
-    test_watermark()
-    test_psnr()
+    while(1):
+        pilihan = int(menu())
+        if pilihan == 0:
+            print("Terimakasih sudah menggunakan aplikasi kami :)")
+            break
+        elif pilihan == 1:
+            key = input("Masukan kata kunci: ")
+            cover_image = input("Masukan path ke cover image (contoh: input/cover.bmp): ")
+            watermark_image = input("Masukan path ke watermark image (contoh: input/watermark.bmp): ")
+            watermark_embedded = input("Masukan nama file keluaran (contoh: out/out.bmp): ")
+            watermark.insert(cover_image, watermark_image, key, watermark_embedded)
+            print("")
+        elif pilihan == 2:
+            key = input("Masukan kata kunci: ")
+            watermark_embedded = input("Masukan path ke gambar stegano (contoh: input/stegano.bmp): ")
+            watermark_image = input("Masukan nama file keluaran (contoh: out/watermark.bmp): ")
+            watermark.extract(watermark_embedded, key, watermark_image)
+            print("")
+        elif pilihan == 3:
+            file_a = input("Masukan path ke file gambar 1 (contoh: input/stegano.bmp): ")
+            file_b = input("Masukan path ke file gambar 2 (contoh: input/cover.bmp): ")
+            img_b = Image.open(file_b)
+            img_a = Image.open(file_a)
+            print("PSNR:", util.psnr(img_a, img_b), "dB")
+            print("")
+        else:
+            print("Command salah")
+            print("")
 
 if __name__ == '__main__':
     main()
